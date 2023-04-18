@@ -11,56 +11,32 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
+ * 用户实体类
  *
- * @author 虎哥
- * @since 2021-12-22
+ * @author 李
+ * @version 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+//chain = true,则对应字段的setter方法调用后，会返回当前对象
 @Accessors(chain = true)
 @TableName("tb_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 主键
-     */
+    //用户id（主键）
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
-    /**
-     * 手机号码
-     */
+    //手机号码
     private String phone;
-
-    /**
-     * 密码，加密存储
-     */
+    //密码
     private String password;
-
-    /**
-     * 昵称，默认是随机字符
-     */
+    //昵称
     private String nickName;
-
-    /**
-     * 用户头像
-     */
+    //用户头像
     private String icon = "";
-
-    /**
-     * 创建时间
-     */
+    //创建时间
     private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
+    //更新时间
     private LocalDateTime updateTime;
-
-
 }
