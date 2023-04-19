@@ -1,14 +1,10 @@
 package com.hmdp.interceptor;
 
-import cn.hutool.http.HttpStatus;
-import com.hmdp.dto.UserDTO;
-import com.hmdp.entity.User;
 import com.hmdp.utils.UserHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author 李
@@ -18,20 +14,14 @@ import javax.servlet.http.HttpSession;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //1.获取session中的用户
-        HttpSession session = request.getSession();
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-        //2.判断用户是否登录过
-        if (userDTO == null) {
-            //如果没有登录过，拦截，返回状态码-401
-            response.setStatus(HttpStatus.HTTP_UNAUTHORIZED);
-            return false;//拦截
+        //判断是否需要拦截(ThreadLocal中是否有用户)
+        if (UserHolder.getUser() == null) {
+            //没有，需要拦截，设置状态码
+            response.setStatus(401);
+            //拦截
+            return false;
         }
-        //3.如果存在，保存用户到ThreadLocal
-        UserHolder.saveUser(userDTO);//这里是一个工具类，自动创建ThreadLocal
-        ThreadLocal<UserDTO> userThreadLocal = new ThreadLocal<UserDTO>();
-        userThreadLocal.set(userDTO);
-        //4.放行
+        //如果有用户，则放行
         return true;
     }
 
