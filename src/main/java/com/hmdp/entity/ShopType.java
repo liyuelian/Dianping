@@ -12,12 +12,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
+ * @author 李
+ * @version 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,38 +23,24 @@ public class ShopType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    //主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    /**
-     * 类型名称
-     */
+    //类型名称
     private String name;
 
-    /**
-     * 图标
-     */
+    //图标
     private String icon;
 
-    /**
-     * 顺序
-     */
+    //顺序
     private Integer sort;
 
-    /**
-     * 创建时间
-     */
+    //创建时间
     @JsonIgnore
     private LocalDateTime createTime;
 
-    /**
-     * 更新时间
-     */
+    //更新时间
     @JsonIgnore
     private LocalDateTime updateTime;
-
-
 }
