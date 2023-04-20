@@ -34,7 +34,7 @@ public class ShopTypeServiceImpl extends ServiceImpl<ShopTypeMapper, ShopType> i
         //查询redis中有没有店铺类型缓存
         String shopTypeJson = stringRedisTemplate.opsForValue().get(CACHE_SHOP_TYPE);
         //如果有，则将其转为对象类型，并返回给客户端
-        if (StrUtil.isBlank(shopTypeJson)) {
+        if (StrUtil.isNotBlank(shopTypeJson)) {
             List<ShopType> shopTypeList = JSONUtil.toList(shopTypeJson, ShopType.class);
             return Result.ok(shopTypeList);
         }
