@@ -12,12 +12,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
+ * 优惠券实体
  *
- * @author 虎哥
- * @since 2021-12-22
+ * @author 李
+ * @version 1.0
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,80 +24,36 @@ import java.time.LocalDateTime;
 public class Voucher implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 主键
-     */
+    //主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
-    /**
-     * 商铺id
-     */
+    //商铺id
     private Long shopId;
-
-    /**
-     * 代金券标题
-     */
+    //代金券标题
     private String title;
-
-    /**
-     * 副标题
-     */
+    //副标题
     private String subTitle;
-
-    /**
-     * 使用规则
-     */
+    //使用规则
     private String rules;
-
-    /**
-     * 支付金额
-     */
+    //支付金额
     private Long payValue;
-
-    /**
-     * 抵扣金额
-     */
+    //抵扣金额
     private Long actualValue;
-
-    /**
-     * 优惠券类型
-     */
+    //优惠券类型
     private Integer type;
-
-    /**
-     * 优惠券类型
-     */
+    //优惠券状态
     private Integer status;
-    /**
-     * 库存
-     */
+    //库存
     @TableField(exist = false)
     private Integer stock;
-
-    /**
-     * 生效时间
-     */
+    //生效时间
     @TableField(exist = false)
     private LocalDateTime beginTime;
-
-    /**
-     * 失效时间
-     */
+    //失效时间
     @TableField(exist = false)
     private LocalDateTime endTime;
-
-    /**
-     * 创建时间
-     */
+    //创建时间
     private LocalDateTime createTime;
-
-
-    /**
-     * 更新时间
-     */
+    //更新时间
     private LocalDateTime updateTime;
-
-
 }
