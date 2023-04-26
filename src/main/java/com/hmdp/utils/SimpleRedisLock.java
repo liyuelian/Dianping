@@ -1,8 +1,11 @@
 package com.hmdp.utils;
 
 import cn.hutool.core.lang.UUID;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,16 +34,38 @@ public class SimpleRedisLock implements ILock {
         return Boolean.TRUE.equals(success);//防止空指针
     }
 
+    //泛型类型是返回型类型
+    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
+
+    //使用静态常量和静态代码块，类一加载就初始化脚本
+    static {
+        UNLOCK_SCRIPT = new DefaultRedisScript<>();
+        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
+        UNLOCK_SCRIPT.setResultType(Long.class);
+    }
+
     @Override
     public void unLock() {
-        //获取线程标识
-        String threadId = ID_PREFIX + Thread.currentThread().getId();
-        //获取redis锁的标识
-        String id = stringRedisTemplate.opsForValue().get(KEY_PREFIX + name);
-        //判断标识是否一致
-        if (threadId.equals(id)) {
-            //一致，则释放锁
-            stringRedisTemplate.delete(KEY_PREFIX + name);
-        }
+        //调用lua脚本
+        //public <T> T execute(RedisScript<T> script, List<K> keys, Object... args) {
+        //    return this.scriptExecutor.execute(script, keys, args);
+        //}
+        stringRedisTemplate.execute(
+                UNLOCK_SCRIPT,
+                Collections.singletonList(KEY_PREFIX + name),//锁的线程标识
+                ID_PREFIX + Thread.currentThread().getId());//当前线程标识
     }
+
+    //@Override
+    //public void unLock() {
+    //    //获取线程标识
+    //    String threadId = ID_PREFIX + Thread.currentThread().getId();
+    //    //获取redis锁的标识
+    //    String id = stringRedisTemplate.opsForValue().get(KEY_PREFIX + name);
+    //    //判断标识是否一致
+    //    if (threadId.equals(id)) {
+    //        //一致，则释放锁
+    //        stringRedisTemplate.delete(KEY_PREFIX + name);
+    //    }
+    //}
 }
